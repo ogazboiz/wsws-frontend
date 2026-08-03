@@ -127,8 +127,14 @@ export async function getLpPositions(wallet: string): Promise<LpPosition[]> {
 
 // ── Top holders / activity / quote (per-market detail surfaces) ──────────────
 
-export async function getHolders(id: string, side: Side, limit = 20): Promise<import("@/lib/prediction/types").Holder[]> {
-  return normalizeHolders(await request<unknown>(`/markets/${id}/holders?side=${side}&limit=${limit}`));
+export async function getHolders(
+  id: string,
+  side: Side,
+  limit = 20
+): Promise<import("@/lib/prediction/types").Holder[]> {
+  return normalizeHolders(
+    await request<unknown>(`/markets/${id}/holders?side=${side}&limit=${limit}`)
+  );
 }
 
 export async function getActivity(id: string, cursor?: string, limit = 30): Promise<ActivityPage> {
@@ -151,7 +157,10 @@ export async function getQuote(
 
 // ── Multi-outcome EVENTS (groups) ────────────────────────────────────────────
 
-export async function listGroups(filter?: { category?: string; status?: string }): Promise<MarketGroup[]> {
+export async function listGroups(filter?: {
+  category?: string;
+  status?: string;
+}): Promise<MarketGroup[]> {
   const q = new URLSearchParams();
   if (filter?.category) q.set("category", filter.category);
   if (filter?.status) q.set("status", filter.status);
@@ -174,7 +183,10 @@ export interface CreateGroupInput {
   closeTime?: number;
 }
 
-export function createGroup(input: CreateGroupInput, idempotencyKey: string): Promise<{ id: string }> {
+export function createGroup(
+  input: CreateGroupInput,
+  idempotencyKey: string
+): Promise<{ id: string }> {
   return post("/groups", input, idempotencyKey);
 }
 
@@ -196,7 +208,10 @@ export function uploadGroupImage(
 
 // ── Comments (signature-verified writes) ─────────────────────────────────────
 
-export async function listComments(scope: { groupId?: string; marketId?: string }, limit = 50): Promise<Comment[]> {
+export async function listComments(
+  scope: { groupId?: string; marketId?: string },
+  limit = 50
+): Promise<Comment[]> {
   const q = new URLSearchParams({ limit: String(limit) });
   if (scope.groupId) q.set("groupId", scope.groupId);
   if (scope.marketId) q.set("marketId", scope.marketId);

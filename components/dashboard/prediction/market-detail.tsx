@@ -56,9 +56,7 @@ export function MarketDetail({ id }: MarketDetailProps) {
   const createdByMe = (myMarkets ?? []).some((m) => m.marketId.toString() === id);
   const isCreator =
     createdByMe ||
-    (!!market &&
-      !!actions.wallet &&
-      market.creator.toLowerCase() === actions.wallet.toLowerCase());
+    (!!market && !!actions.wallet && market.creator.toLowerCase() === actions.wallet.toLowerCase());
   const canResolve = isCreator && (market?.status === "Open" || market?.status === "Closed");
 
   if (isLoading || !market) {
@@ -154,7 +152,9 @@ export function MarketDetail({ id }: MarketDetailProps) {
                     key={iv}
                     onClick={() => setInterval(iv)}
                     className={`cursor-pointer rounded-md px-2 py-1 text-[12px] font-medium transition-colors ${
-                      interval === iv ? "bg-white/12 text-white" : "text-white/45 hover:text-white/70"
+                      interval === iv
+                        ? "bg-white/12 text-white"
+                        : "text-white/45 hover:text-white/70"
                     }`}
                   >
                     {iv}

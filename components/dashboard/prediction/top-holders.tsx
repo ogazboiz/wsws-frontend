@@ -38,7 +38,9 @@ export function TopHolders({ marketId }: TopHoldersProps) {
       {isLoading ? (
         <p className="py-6 text-center text-[13px] font-normal text-white/45">{t("loading")}</p>
       ) : !holders || holders.length === 0 ? (
-        <p className="py-6 text-center text-[13px] font-normal text-white/45">{t("noHolders_empty")}</p>
+        <p className="py-6 text-center text-[13px] font-normal text-white/45">
+          {t("noHolders_empty")}
+        </p>
       ) : (
         <ol className="flex flex-col gap-1.5">
           {holders.map((h, i) => (
@@ -46,7 +48,7 @@ export function TopHolders({ marketId }: TopHoldersProps) {
               key={`${h.holder}-${h.marketId}`}
               className="flex items-center gap-3 rounded-lg px-2 py-1.5 hover:bg-white/[0.03]"
             >
-              <span className="w-5 shrink-0 text-right text-[12px] font-medium tabular-nums text-white/40">
+              <span className="w-5 shrink-0 text-right text-[12px] font-medium text-white/40 tabular-nums">
                 {i + 1}
               </span>
               <span className="overflow-hidden rounded-full">

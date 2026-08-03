@@ -31,7 +31,9 @@ export function ActivityFeed({ marketId }: ActivityFeedProps) {
       {isLoading ? (
         <p className="py-6 text-center text-[13px] font-normal text-white/45">{t("loading")}</p>
       ) : items.length === 0 ? (
-        <p className="py-6 text-center text-[13px] font-normal text-white/45">{t("activity_empty")}</p>
+        <p className="py-6 text-center text-[13px] font-normal text-white/45">
+          {t("activity_empty")}
+        </p>
       ) : (
         <>
           <ul className="flex flex-col divide-y divide-white/[0.06]">
@@ -64,7 +66,11 @@ function ActivityRow({ item, label }: { item: ActivityItem; label: string }) {
   return (
     <li className="flex items-center gap-3 py-2.5">
       <span className="overflow-hidden rounded-full">
-        <Blockies seed={(item.actor || item.marketId.toString()).toLowerCase()} size={8} scale={3} />
+        <Blockies
+          seed={(item.actor || item.marketId.toString()).toLowerCase()}
+          size={8}
+          scale={3}
+        />
       </span>
       <div className="min-w-0 flex-1">
         <p className="truncate text-[13px] text-white/85">
@@ -72,7 +78,7 @@ function ActivityRow({ item, label }: { item: ActivityItem; label: string }) {
           <span className={tone}>{label}</span>
         </p>
       </div>
-      <span className="shrink-0 text-[11.5px] font-normal tabular-nums text-white/35">
+      <span className="shrink-0 text-[11.5px] font-normal text-white/35 tabular-nums">
         {timeAgo(item.at)}
       </span>
     </li>
@@ -86,7 +92,10 @@ function activityLabel(a: ActivityItem, t: Translator): string {
       const verb = a.buy ? t("act_bought") : t("act_sold");
       const amount = a.usdcAmount != null ? compactUsd(a.usdcAmount) : "";
       const side = a.side ? a.side.toUpperCase() : "";
-      const at = a.priceYes != null ? ` @ ${priceToCents(a.side === "no" ? BigInt(1_000_000) - a.priceYes : a.priceYes)}` : "";
+      const at =
+        a.priceYes != null
+          ? ` @ ${priceToCents(a.side === "no" ? BigInt(1_000_000) - a.priceYes : a.priceYes)}`
+          : "";
       return `${verb} ${amount} ${side}${at}`.trim();
     }
     case "lp_add":

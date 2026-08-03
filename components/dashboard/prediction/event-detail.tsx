@@ -62,7 +62,9 @@ export function EventDetail({ idOrSlug }: EventDetailProps) {
             <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-white/60">
               {compactUsd(group.volumeUsdc)} {t("eventVolume")}
             </span>
-            <span className="text-white/45">{t("outcomeCount", { count: group.outcomeCount })}</span>
+            <span className="text-white/45">
+              {t("outcomeCount", { count: group.outcomeCount })}
+            </span>
           </div>
           <h1 className="ws-display truncate text-[20px] leading-tight tracking-[-0.01em] sm:text-[26px]">
             {group.title}
@@ -74,7 +76,9 @@ export function EventDetail({ idOrSlug }: EventDetailProps) {
         <div className="flex flex-col gap-6">
           {/* Outcome (candidate) rows */}
           <div className="ws-card p-3 sm:p-4">
-            <span className="ws-display mb-2 block px-2 pt-1 text-[14px]">{t("outcomesTitle")}</span>
+            <span className="ws-display mb-2 block px-2 pt-1 text-[14px]">
+              {t("outcomesTitle")}
+            </span>
             <ul className="flex flex-col">
               {group.outcomes.map((o) => (
                 <OutcomeRow key={o.memberId} outcome={o} />
@@ -87,12 +91,12 @@ export function EventDetail({ idOrSlug }: EventDetailProps) {
             <div className="ws-card flex flex-col gap-4 p-5 sm:p-6">
               <span className="ws-display text-[15px]">{t("rulesTitle")}</span>
               {group.description ? (
-                <p className="whitespace-pre-wrap text-[13.5px] leading-relaxed text-white/75">
+                <p className="text-[13.5px] leading-relaxed whitespace-pre-wrap text-white/75">
                   {group.description}
                 </p>
               ) : null}
               {group.rules ? (
-                <p className="whitespace-pre-wrap text-[13px] leading-relaxed text-white/60">
+                <p className="text-[13px] leading-relaxed whitespace-pre-wrap text-white/60">
                   {group.rules}
                 </p>
               ) : null}

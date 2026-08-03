@@ -46,7 +46,7 @@ export function OutcomeRow({ outcome }: OutcomeRowProps) {
       </Link>
 
       {/* Probability */}
-      <span className="ws-display w-12 shrink-0 text-right text-[16px] tabular-nums text-white/85">
+      <span className="ws-display w-12 shrink-0 text-right text-[16px] text-white/85 tabular-nums">
         {pct}%
       </span>
 
@@ -54,14 +54,14 @@ export function OutcomeRow({ outcome }: OutcomeRowProps) {
       <div className="flex shrink-0 gap-2">
         <Link
           href={`/prediction/${marketId}?side=yes`}
-          className="border-up/40 bg-up/12 text-up flex flex-col items-center rounded-lg border px-3 py-1.5 text-[12px] font-semibold hover:bg-up/20"
+          className="border-up/40 bg-up/12 text-up hover:bg-up/20 flex flex-col items-center rounded-lg border px-3 py-1.5 text-[12px] font-semibold"
         >
           <span className="text-[10px] font-medium opacity-70">{t("buyYes")}</span>
           {priceToCents(outcome.priceYes)}
         </Link>
         <Link
           href={`/prediction/${marketId}?side=no`}
-          className="border-down/40 bg-down/12 text-down flex flex-col items-center rounded-lg border px-3 py-1.5 text-[12px] font-semibold hover:bg-down/20"
+          className="border-down/40 bg-down/12 text-down hover:bg-down/20 flex flex-col items-center rounded-lg border px-3 py-1.5 text-[12px] font-semibold"
         >
           <span className="text-[10px] font-medium opacity-70">{t("buyNo")}</span>
           {priceToCents(outcome.priceNo)}

@@ -31,7 +31,15 @@ const DURATIONS: { key: string; label: string; seconds: number }[] = [
 
 // Fallback categories (from the platform's category taxonomy) so users can
 // always pick one even before the live category list is populated.
-const DEFAULT_CATEGORIES = ["Crypto", "Forex", "Commodities", "Equities", "Sports", "Politics", "Other"];
+const DEFAULT_CATEGORIES = [
+  "Crypto",
+  "Forex",
+  "Commodities",
+  "Equities",
+  "Sports",
+  "Politics",
+  "Other",
+];
 
 // Generates an unused market id off-chain: a random uint256 (the contract lets
 // the creator pick the id; a wide random space avoids collisions).
@@ -421,7 +429,9 @@ export function CreateMarketFlow({ onDone }: CreateMarketFlowProps) {
                 onChange={(e) => onPickFile(e.target.files?.[0] ?? null)}
                 className="font-sans text-[12.5px] text-white/60 file:mr-3 file:cursor-pointer file:rounded-lg file:border-0 file:bg-white/10 file:px-3 file:py-1.5 file:text-white disabled:opacity-50"
               />
-              <span className={uploading ? "text-accent text-[11.5px]" : "text-[11.5px] text-white/40"}>
+              <span
+                className={uploading ? "text-accent text-[11.5px]" : "text-[11.5px] text-white/40"}
+              >
                 {uploading ? t("uploadingImage") : t("imageHint")}
               </span>
               {imageError ? (

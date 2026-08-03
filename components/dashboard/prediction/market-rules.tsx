@@ -23,7 +23,7 @@ export function MarketRules({ market }: MarketRulesProps) {
 
       {market.description ? (
         <Section title={t("rulesContext")}>
-          <p className="whitespace-pre-wrap text-[13.5px] leading-relaxed text-white/75">
+          <p className="text-[13.5px] leading-relaxed whitespace-pre-wrap text-white/75">
             {market.description}
           </p>
         </Section>
@@ -31,7 +31,7 @@ export function MarketRules({ market }: MarketRulesProps) {
 
       {market.rules ? (
         <Section title={t("rulesResolution")}>
-          <p className="whitespace-pre-wrap text-[13.5px] leading-relaxed text-white/75">
+          <p className="text-[13.5px] leading-relaxed whitespace-pre-wrap text-white/75">
             {market.rules}
           </p>
         </Section>
@@ -64,7 +64,9 @@ export function MarketRules({ market }: MarketRulesProps) {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <span className="text-[12px] font-semibold uppercase tracking-wide text-white/40">{title}</span>
+      <span className="text-[12px] font-semibold tracking-wide text-white/40 uppercase">
+        {title}
+      </span>
       {children}
     </div>
   );
@@ -73,7 +75,9 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function Meta({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
   return (
     <div className="flex flex-col gap-1">
-      <span className="text-[11.5px] font-medium uppercase tracking-wide text-white/35">{label}</span>
+      <span className="text-[11.5px] font-medium tracking-wide text-white/35 uppercase">
+        {label}
+      </span>
       <span className={`text-[13.5px] text-white/85 ${mono ? "font-mono" : ""}`}>{value}</span>
     </div>
   );

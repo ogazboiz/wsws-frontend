@@ -51,127 +51,129 @@ export function PortfolioPanel() {
 
   return (
     <>
-    <div className="ws-card relative mt-7 overflow-hidden sm:mt-9">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[92px] bg-[linear-gradient(180deg,rgba(255,255,255,0.08),transparent)]"
-      />
-      <div className="relative flex flex-wrap items-center justify-between gap-3 px-5 pt-5 pb-4 sm:px-6">
-        <div className="flex min-w-0 items-center gap-3.5">
-          <span className="bg-accent/16 text-accent grid h-12 w-12 shrink-0 place-items-center rounded-[14px]">
-            <ChartBarsIcon size={24} />
-          </span>
-          <div className="min-w-0">
-            <span className="ws-display text-[21px] tracking-[-0.01em]">{t("positionsTitle")}</span>
-            <div className="tnum mt-0.5 text-[13px] font-normal text-white/60">
-              {t("positionsSubtitle")}
+      <div className="ws-card relative mt-7 overflow-hidden sm:mt-9">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-[92px] bg-[linear-gradient(180deg,rgba(255,255,255,0.08),transparent)]"
+        />
+        <div className="relative flex flex-wrap items-center justify-between gap-3 px-5 pt-5 pb-4 sm:px-6">
+          <div className="flex min-w-0 items-center gap-3.5">
+            <span className="bg-accent/16 text-accent grid h-12 w-12 shrink-0 place-items-center rounded-[14px]">
+              <ChartBarsIcon size={24} />
+            </span>
+            <div className="min-w-0">
+              <span className="ws-display text-[21px] tracking-[-0.01em]">
+                {t("positionsTitle")}
+              </span>
+              <div className="tnum mt-0.5 text-[13px] font-normal text-white/60">
+                {t("positionsSubtitle")}
+              </div>
             </div>
           </div>
         </div>
+
+        {isError ? (
+          <div className="border-t border-white/6 px-6 py-6 text-center text-[13px] font-normal text-white/45">
+            {t("positionsError")}
+          </div>
+        ) : isLoading ? (
+          <div className="border-t border-white/6 px-6 py-6 text-center text-[13px] font-normal text-white/45">
+            {t("loading")}
+          </div>
+        ) : list.length === 0 ? (
+          <div className="border-t border-white/6 px-6 py-6 text-center text-[13px] font-normal text-white/45">
+            {t("noPositions")}
+          </div>
+        ) : (
+          list.map((p) => {
+            const m = byId.get(p.marketId.toString());
+            const winner = isWinner(p, m);
+            return (
+              <div
+                key={`${p.marketId}-${p.side}`}
+                className="grid grid-cols-[1fr_auto] items-center gap-3 border-t border-white/6 px-4 py-3 sm:px-6"
+              >
+                <Link href={`/prediction/${p.marketId}`} className="min-w-0">
+                  <div className="truncate font-sans text-[13.5px] font-medium">
+                    {m?.question ?? t("marketFallback")}
+                  </div>
+                  <div className="flex items-center gap-1 text-xs font-normal text-white/50">
+                    <span className="truncate">
+                      {sideLabel(p.side)} ·{" "}
+                      {t("sharesCount", { count: toNumber(p.shares).toFixed(2) })}
+                    </span>
+                    <span className="text-accent inline-flex shrink-0 items-center">
+                      · {t("viewSlip")}
+                      <ChevronLeftIcon size={12} className="-scale-x-100" />
+                    </span>
+                  </div>
+                </Link>
+                {winner ? (
+                  <button
+                    onClick={() => onRedeem(p)}
+                    disabled={actions.busy}
+                    className="border-accent/45 bg-accent/12 cursor-pointer rounded-lg border px-3 py-1.5 text-[12.5px] font-medium text-white disabled:opacity-60"
+                  >
+                    {actions.busy ? t("claiming") : t("claim")}
+                  </button>
+                ) : m?.status === "Resolved" ? (
+                  <span className="text-down text-right text-[12.5px] font-medium">
+                    {t("resolvedNoWin")}
+                  </span>
+                ) : (
+                  <span className="tnum text-right font-sans text-sm font-medium">
+                    {money.format(toNumber(p.costUsdc))}
+                  </span>
+                )}
+              </div>
+            );
+          })
+        )}
+
+        {claimable > 0n ? (
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/6 px-4 py-3.5 sm:px-6">
+            <span className="text-[12.5px] font-normal text-white/55">
+              {t("claimableBalance", { amount: money.format(toNumber(claimable)) })}
+            </span>
+            <button
+              onClick={() => actions.claim()}
+              disabled={actions.busy}
+              className="text-ink cursor-pointer rounded-lg bg-white px-3 py-1.5 text-[12.5px] font-semibold hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {actions.busy ? t("claiming") : t("claim")}
+            </button>
+          </div>
+        ) : null}
       </div>
 
-      {isError ? (
-        <div className="border-t border-white/6 px-6 py-6 text-center text-[13px] font-normal text-white/45">
-          {t("positionsError")}
-        </div>
-      ) : isLoading ? (
-        <div className="border-t border-white/6 px-6 py-6 text-center text-[13px] font-normal text-white/45">
-          {t("loading")}
-        </div>
-      ) : list.length === 0 ? (
-        <div className="border-t border-white/6 px-6 py-6 text-center text-[13px] font-normal text-white/45">
-          {t("noPositions")}
-        </div>
-      ) : (
-        list.map((p) => {
-          const m = byId.get(p.marketId.toString());
-          const winner = isWinner(p, m);
-          return (
-            <div
-              key={`${p.marketId}-${p.side}`}
-              className="grid grid-cols-[1fr_auto] items-center gap-3 border-t border-white/6 px-4 py-3 sm:px-6"
-            >
-              <Link href={`/prediction/${p.marketId}`} className="min-w-0">
-                <div className="truncate font-sans text-[13.5px] font-medium">
-                  {m?.question ?? t("marketFallback")}
-                </div>
-                <div className="flex items-center gap-1 text-xs font-normal text-white/50">
-                  <span className="truncate">
-                    {sideLabel(p.side)} ·{" "}
-                    {t("sharesCount", { count: toNumber(p.shares).toFixed(2) })}
-                  </span>
-                  <span className="text-accent inline-flex shrink-0 items-center">
-                    · {t("viewSlip")}
-                    <ChevronLeftIcon size={12} className="-scale-x-100" />
-                  </span>
-                </div>
-              </Link>
-              {winner ? (
-                <button
-                  onClick={() => onRedeem(p)}
-                  disabled={actions.busy}
-                  className="border-accent/45 bg-accent/12 cursor-pointer rounded-lg border px-3 py-1.5 text-[12.5px] font-medium text-white disabled:opacity-60"
-                >
-                  {actions.busy ? t("claiming") : t("claim")}
-                </button>
-              ) : m?.status === "Resolved" ? (
-                <span className="text-down text-right text-[12.5px] font-medium">
-                  {t("resolvedNoWin")}
-                </span>
-              ) : (
-                <span className="tnum text-right font-sans text-sm font-medium">
-                  {money.format(toNumber(p.costUsdc))}
-                </span>
-              )}
+      {created.length > 0 ? (
+        <div className="ws-card mt-5 overflow-hidden">
+          <div className="px-5 pt-5 pb-3 sm:px-6">
+            <span className="ws-display text-[18px] tracking-[-0.01em]">{t("yourMarkets")}</span>
+            <div className="mt-0.5 text-[12.5px] font-normal text-white/60">
+              {t("yourMarketsSubtitle")}
             </div>
-          );
-        })
-      )}
-
-      {claimable > 0n ? (
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/6 px-4 py-3.5 sm:px-6">
-          <span className="text-[12.5px] font-normal text-white/55">
-            {t("claimableBalance", { amount: money.format(toNumber(claimable)) })}
-          </span>
-          <button
-            onClick={() => actions.claim()}
-            disabled={actions.busy}
-            className="text-ink cursor-pointer rounded-lg bg-white px-3 py-1.5 text-[12.5px] font-semibold hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {actions.busy ? t("claiming") : t("claim")}
-          </button>
+          </div>
+          {created.map((m) => (
+            <Link
+              key={m.marketId.toString()}
+              href={`/prediction/${m.marketId}`}
+              className="grid grid-cols-[1fr_auto] items-center gap-3 border-t border-white/6 px-4 py-3 transition-colors hover:bg-white/4 sm:px-6"
+            >
+              <div className="min-w-0">
+                <div className="truncate font-sans text-[13.5px] font-medium">
+                  {m.question ?? t("marketFallback")}
+                </div>
+                <div className="text-xs font-normal text-white/50">{t(`status_${m.status}`)}</div>
+              </div>
+              <span className="text-accent inline-flex shrink-0 items-center text-[12.5px] font-medium">
+                {m.status === "Open" || m.status === "Closed" ? t("resolveTitle") : t("viewSlip")}
+                <ChevronLeftIcon size={12} className="-scale-x-100" />
+              </span>
+            </Link>
+          ))}
         </div>
       ) : null}
-    </div>
-
-    {created.length > 0 ? (
-      <div className="ws-card mt-5 overflow-hidden">
-        <div className="px-5 pt-5 pb-3 sm:px-6">
-          <span className="ws-display text-[18px] tracking-[-0.01em]">{t("yourMarkets")}</span>
-          <div className="mt-0.5 text-[12.5px] font-normal text-white/60">
-            {t("yourMarketsSubtitle")}
-          </div>
-        </div>
-        {created.map((m) => (
-          <Link
-            key={m.marketId.toString()}
-            href={`/prediction/${m.marketId}`}
-            className="grid grid-cols-[1fr_auto] items-center gap-3 border-t border-white/6 px-4 py-3 transition-colors hover:bg-white/4 sm:px-6"
-          >
-            <div className="min-w-0">
-              <div className="truncate font-sans text-[13.5px] font-medium">
-                {m.question ?? t("marketFallback")}
-              </div>
-              <div className="text-xs font-normal text-white/50">{t(`status_${m.status}`)}</div>
-            </div>
-            <span className="text-accent inline-flex shrink-0 items-center text-[12.5px] font-medium">
-              {m.status === "Open" || m.status === "Closed" ? t("resolveTitle") : t("viewSlip")}
-              <ChevronLeftIcon size={12} className="-scale-x-100" />
-            </span>
-          </Link>
-        ))}
-      </div>
-    ) : null}
     </>
   );
 }

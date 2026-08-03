@@ -148,9 +148,9 @@ describe("normalizeQuote", () => {
 describe("comment-signing parity", () => {
   // These strings are duplicated in the backend CommentService — keep in sync.
   it("builds the exact comment message", () => {
-    expect(
-      commentMessage({ scope: "group", scopeId: "g1", body: "hello", timestamp: 123 })
-    ).toBe("World Street — post comment\nscope: group:g1\nbody: hello\nts: 123");
+    expect(commentMessage({ scope: "group", scopeId: "g1", body: "hello", timestamp: 123 })).toBe(
+      "World Street — post comment\nscope: group:g1\nbody: hello\nts: 123"
+    );
   });
   it("builds the exact like message", () => {
     expect(likeMessage("c1", 123)).toBe("World Street — like comment\nid: c1\nts: 123");

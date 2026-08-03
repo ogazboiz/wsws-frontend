@@ -36,7 +36,10 @@ export function usePredictionComments(target: Scope) {
 
   const wallet = getWalletAddress(user, "ethereum");
 
-  const getProvider = useCallback(async (): Promise<{ provider: EIP1193Provider; address: string }> => {
+  const getProvider = useCallback(async (): Promise<{
+    provider: EIP1193Provider;
+    address: string;
+  }> => {
     const w = wallets.find((x) => x.walletClientType === "privy");
     if (!w) throw new Error("Connect a wallet to comment.");
     const provider = (await w.getEthereumProvider()) as unknown as EIP1193Provider;

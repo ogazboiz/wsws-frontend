@@ -24,10 +24,7 @@ export function CommentsPanel({ marketId, groupId }: CommentsPanelProps) {
     ? ({ scope: "group", scopeId: groupId } as const)
     : ({ scope: "market", scopeId: marketId as string } as const);
 
-  const { data: comments, isLoading } = useComments(
-    groupId ? { groupId } : { marketId },
-    100
-  );
+  const { data: comments, isLoading } = useComments(groupId ? { groupId } : { marketId }, 100);
   const { submit, like, busy, canComment } = usePredictionComments(scope);
   const [draft, setDraft] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -77,7 +74,9 @@ export function CommentsPanel({ marketId, groupId }: CommentsPanelProps) {
       {isLoading ? (
         <p className="py-6 text-center text-[13px] font-normal text-white/45">{t("loading")}</p>
       ) : roots.length === 0 ? (
-        <p className="py-6 text-center text-[13px] font-normal text-white/45">{t("comments_empty")}</p>
+        <p className="py-6 text-center text-[13px] font-normal text-white/45">
+          {t("comments_empty")}
+        </p>
       ) : (
         <ul className="flex flex-col gap-4">
           {roots.map((c) => (
@@ -109,11 +108,17 @@ function CommentRow({ comment, onLike }: { comment: Comment; onLike: () => void 
       </span>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-[12px] text-white/70">{shortAddress(comment.wallet)}</span>
+          <span className="font-mono text-[12px] text-white/70">
+            {shortAddress(comment.wallet)}
+          </span>
           <span className="text-[11px] font-normal text-white/35">{timeAgo(comment.at)}</span>
         </div>
-        <p className="mt-0.5 whitespace-pre-wrap break-words text-[13.5px] text-white/90">
-          {comment.deleted ? <span className="italic text-white/40">{t("commentDeleted")}</span> : comment.body}
+        <p className="mt-0.5 text-[13.5px] break-words whitespace-pre-wrap text-white/90">
+          {comment.deleted ? (
+            <span className="text-white/40 italic">{t("commentDeleted")}</span>
+          ) : (
+            comment.body
+          )}
         </p>
         {!comment.deleted ? (
           <button
